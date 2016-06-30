@@ -1,28 +1,66 @@
 import {combineReducers} from 'redux';
 import * as types from '../actions/action-type'
 import _ from 'lodash'
-
+import $ from 'jquery'
+import { routerReducer as routing } from 'react-router-redux'
 
 const initialFromState = {
     status:"edit"
 };
 const initialItemState = {
+    deleteItems:[],
     items:[]
 };
 
 function ItemReducer(state = initialItemState, action) {
     var type = action.type;
     if (type == types.Add_ITEM){
-        let newState = _.concat(state.items,action.item);
+        let newState = _.concat(state.items,{type:action.item,key:state.items.length + state.deleteItems.length + 1});
+        console.log(newState);
         return _.assign({},state,{items:newState})
     }
     if (type == types.REMOVE_ITEM){
-        let newState = _.filter(state.items,function (value,index) {
+        let newItem = _.filter(state.items,function (value,index) {
             return index != action.index;
         });
-        return _.assign({},state,{items:newState})
+        let newDeleteItems = _.chain(state.items).filter(function (value,index) {
+            return index == action.index;
+        }).concat(state.deleteItems).value();
+        console.log(_.assign({},state,{items:newItem,deleteItems:newDeleteItems}));
+        return _.assign({},state,{items:newItem,deleteItems:newDeleteItems})
     }
-    
+    if (type == types.GET_ITEM){
+        let items = $.ajax({
+            url:'/item',
+            type:'get',
+            async:false,
+            dataType:'json',
+            success:function (data) {
+
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        }).responseJSON;
+        // console.log(_.assign({},state,{items:items.items,deleteItems:items.deleteItems}));
+        return _.assign({},state,{items:items.items,deleteItems:items.deleteItems})
+    }
+    if (type == types.SUBMIT_ITEM){
+        $.ajax({
+            url:'/submit',
+            type:'get',
+            async:true,
+            dataType:'json',
+            data:{state},
+            success:function (data) {
+                alert(data);
+            },
+            error:function (err) {
+                console.log(err);
+            }
+        });
+        return state;
+    }
     return state;
 }
 
@@ -39,7 +77,8 @@ function FromReducer(state = initialFromState, action) {
 
 const reducers = combineReducers({
     ItemState:ItemReducer,
-    FromState:FromReducer
+    FromState:FromReducer,
+    routing
 });
 
 export default reducers;

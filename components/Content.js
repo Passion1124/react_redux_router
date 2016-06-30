@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import * as FromApi from '../handler/from-api'
-import FromEdit from './FromEdit'
-import FromPreview from './FromPreview'
-
+import * as FormApi from '../handler/form-api'
+import FormEdit from './FormEdit'
+import FormPreview from './FormPreview'
+import { connect } from 'react-redux'
 
 class Content extends Component{
 
@@ -11,11 +11,11 @@ class Content extends Component{
     }
     
     renderEdit(){
-        FromApi.showEdit();
+        FormApi.showEdit();
     }
     
     renderPreview(){
-        FromApi.showPreview();
+        FormApi.showPreview();
     }
     
     render(){
@@ -32,9 +32,9 @@ class Content extends Component{
                 
                 {(function () {
                     if (self.props.status === "edit"){
-                        return (<FromEdit items={self.props.items} />)
+                        return (<FormEdit items={self.props.items} />)
                     }else {
-                        return (<FromPreview items={self.props.items} />)
+                        return (<FormPreview items={self.props.items} />)
                     }
                 })()}
             </div>
@@ -42,4 +42,18 @@ class Content extends Component{
     }
 }
 
-export default Content;
+Content.propTypes = {
+    items:PropTypes.array.isRequired,
+    status:PropTypes.string.isRequired
+};
+console.log(Content.propTypes);
+
+function mapStateToProps(state, ownProps) {
+    return {
+        items: state.ItemState.items,
+        status:state.FromState.status
+    }
+}
+console.log(connect(mapStateToProps,{})(Content));
+
+export default connect(mapStateToProps,{})(Content);

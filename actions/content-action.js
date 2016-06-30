@@ -13,3 +13,15 @@ export function removeItemAction(index) {
         index
     }
 }
+
+export function getItemAction() {
+    return {
+        type:types.GET_ITEM
+    }
+}
+
+export function submitItemAction() {
+    return {
+        type:types.SUBMIT_ITEM
+    }
+}

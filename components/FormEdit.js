@@ -24,16 +24,16 @@ class FromEdit extends Component{
         return (
             <div>
                 <ul>
-                    {self.props.items.map(function (item,index) {
-                        return (<li>{item}
-                            {(function () {
-                                if (item === "date"){
+                    {this.props.items.map((item,index) => {
+                        return (<li>{item.type}
+                            {(() => {
+                                if (item.type === "date"){
                                     return (<input type="date" />)
                                 }else {
                                     return (<input type="text" />)
                                 }
                             })()}
-                            <button onClick={self.removeItem} data-item-index={index}>-</button>
+                            <button onClick={this.removeItem} data-item-index={index}>-</button>
                         </li>)
                     })}
                 </ul>
