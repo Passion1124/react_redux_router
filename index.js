@@ -16,18 +16,6 @@ const content = document.getElementById('content');
 
 const history = syncHistoryWithStore(browserHistory,store);
 
-// console.log(history);
-//
-// ReactDOM.render(
-//     <Provider store={store}>
-//         <Router history={history}>
-//             <Route path="/" component={Content} />
-//         </Router>
-//     </Provider>,
-//     content
-// );
-
-
     ReactDOM.render(
         <Provider store={store}>
             <Router history={history}>
@@ -41,17 +29,5 @@ const history = syncHistoryWithStore(browserHistory,store);
         content
     );
 
-
-// function render() {
-//     ReactDOM.render(
-//         <Content
-//             items={store.getState().ItemState.items}
-//             status={store.getState().FromState.status}
-//         />,content)
-// }
-//
-// render();
-//
-// store.subscribe(render);
 
 ContentApi.getItem();
